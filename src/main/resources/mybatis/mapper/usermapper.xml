@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	select表示查询标签
+	 id:表示查询唯一标识
+	 parameterType:输入类型，可以为基本，引用
+	 	参数传入写法：
+	 		#{}是占位符，不需要考虑类型
+	 		${}是拼接字符串的写法//
+	 resultType:结果集存放的对象类型
+	 selectOne:取得单一对象
+	 selectList：取得多个对象，返回多条记录，以一条记录的类型来计
+ -->
+<mapper namespace="com.gx.springboot.dto.UserDao">
+
+    <select id="findUserById" parameterType="int" resultType="com.gx.springboot.entity.User">
+        select user_id,user_name,user_pwd from springbootdemo_user where user_id = #{id}
+    </select>
+
+    <select id="queryAll" resultType="com.gx.springboot.entity.User">
+        select user_id,user_name,user_pwd from springbootdemo_user
+    </select>
+
+    <select id="queryForUser" parameterType="String" resultType="com.gx.springboot.entity.User">
+        select user_id,user_name,user_pwd from springbootdemo_user
+        where user_name = #{userName}  and user_pwd = #{password}
+    </select>
+</mapper>

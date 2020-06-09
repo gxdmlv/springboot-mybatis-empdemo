@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	select表示查询标签
+	 id:表示查询唯一标识
+	 parameterType:输入类型，可以为基本，引用
+	 	参数传入写法：
+	 		#{}是占位符，不需要考虑类型
+	 		${}是拼接字符串的写法//
+	 resultType:结果集存放的对象类型
+	 selectOne:取得单一对象
+	 selectList：取得多个对象，返回多条记录，以一条记录的类型来计
+ -->
+<mapper namespace="com.gx.springboot.dto.EmployeeDao">
+
+    <resultMap id="resultEmpDept" type="com.gx.springboot.entity.Employee">
+        <id column="id" property="id" />
+        <result column="lastName" property="lastName"></result>
+        <result column="email" property="email"></result>
+        <result column="gender" property="gender"></result>
+        <result column="birth" property="birth"></result>
+        <result column="d_id" property="d_id"></result>
+        <association column="department" property="department" javaType="com.gx.springboot.entity.Department">
+            <id column="id" property="id"></id>
+            <result column="departmentName" property="departmentName"></result>
+        </association>
+
+    </resultMap>
+
+    <select id="findAll" resultMap="resultEmpDept">
+        select emp.id, emp.lastName, emp.email, emp.gender,emp.birth, emp.d_id, dept.id, dept.departmentName
+        from employee emp
+                 left join department dept
+                           on emp.d_id = dept.id
+    </select>
+
+    <select id="findEmpById" parameterType="int" resultMap="resultEmpDept">
+        select emp.id, emp.lastName, emp.email, emp.gender,emp.birth, emp.d_id, dept.id, dept.departmentName
+        from employee emp
+                 left join department dept
+                           on emp.d_id = dept.id
+        where emp.id = #{id}
+    </select>
+
+    <insert id="insertEmp">
+        insert into employee(lastName,email,gender,birth,d_id)
+        values (#{lastName}, #{email}, #{gender},#{birth}, #{d_id})
+    </insert>
+
+    <update id="updateEmp">
+        update employee
+        set lastName=#{lastName},
+            email=#{email},
+            gender=#{gender},
+            birth=#{birth},
+            d_id=#{d_id}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEmp">
+        delete
+        from employee
+        where id = #{id}
+    </delete>
+</mapper>
